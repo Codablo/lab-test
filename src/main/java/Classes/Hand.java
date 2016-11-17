@@ -21,18 +21,18 @@ public class Hand implements HandI {
 
     @Override
     public String visibleHand(boolean hideBottom) {
-        String visibleHand = "";
+        String visibleHandStr = "";
 
         for (int i = 0; i < theHand.size(); i++) {
             Card theDeckCard = theHand.get(i);
             if (!hideBottom && i == 0) {
-                visibleHand = visibleHand + theDeckCard.toString();
+                visibleHandStr = visibleHandStr + theDeckCard.toString();
             }
             if (i > 0) {
-                visibleHand = visibleHand + theDeckCard.toString();
+                visibleHandStr = visibleHandStr + theDeckCard.toString();
             }
         }
-        return visibleHand;
+        return visibleHandStr;
     }
 
     @Override

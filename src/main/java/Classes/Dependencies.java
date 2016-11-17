@@ -54,14 +54,20 @@ public class Dependencies {
         }
     });
 
+    public static final InstanceFactory<Prompt> prompt = new InstanceFactory<>(new BuildFunction<Prompt>() {
+
+        @Override
+        public Prompt build() {
+            return new Prompt();
+        }
+    });
+
     public static final InstanceFactory<HumanPlayer> humanPlayer = new InstanceFactory<>(new BuildFunction<HumanPlayer>() {
         private HumanPlayer humanPlayer = null;
 
         @Override
         public HumanPlayer build() {
-            if (humanPlayer == null)
-                humanPlayer = new HumanPlayer();
-            return humanPlayer;
+            return new HumanPlayer();
         }
     });
 
@@ -70,9 +76,15 @@ public class Dependencies {
 
         @Override
         public BotPlayer build() {
-            if (botPlayer == null)
-                botPlayer = new BotPlayer();
-            return botPlayer;
+            return new BotPlayer();
+        }
+    });
+
+    public static final InstanceFactory<Score> score = new InstanceFactory<>(new BuildFunction<Score>() {
+
+        @Override
+        public Score build() {
+            return new Score();
         }
     });
 }

@@ -8,14 +8,23 @@ import enums.Action;
  */
 public class HumanPlayer implements PlayerI {
     Hand humanHand = Dependencies.hand.make();
-    ConsoleIO consoleIO = Dependencies.console.make();
+    Prompt humanPrompt = Dependencies.prompt.make();
+
     @Override
     public Action nextAction(Hand otherHand) {
-        return null;
+        String actions = "BOT Player Hand: " + otherHand.visibleHand(true) + ", press h to Hit or s to Stay:";
+        String validActions = "[" + Action.Stay.text + Action.Hit.text + "]";
+        String userResponse = humanPrompt.prompt(actions, validActions, Action.Stay.text);
+
+        if (userResponse.equals(Action.Stay.text)) {
+            return Action.Stay;
+        } else {
+            return Action.Hit;
+        }
     }
 
     @Override
     public Hand getHand() {
-        return null;
+        return humanHand;
     }
 }

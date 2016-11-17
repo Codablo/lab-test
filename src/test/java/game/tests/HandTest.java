@@ -1,6 +1,7 @@
 package game.tests;
 
 import Classes.Card;
+import Classes.Dependencies;
 import Classes.Hand;
 import enums.Rank;
 import enums.Suite;
@@ -20,14 +21,14 @@ public class HandTest {
 
     @Test
     public void has_size_zero_before_adding_cards() {
-        Hand newHand = new Hand();
+        Hand newHand = Dependencies.hand.make();
 
         assertEquals(newHand.size(), 0);
     }
 
     @Test
     public void has_correct_size_after_adding_cards() {
-        Hand newHand = new Hand();
+        Hand newHand = Dependencies.hand.make();
 
         newHand.addCard(card1);
         assertEquals(newHand.size(), 1);
@@ -45,7 +46,7 @@ public class HandTest {
         theCards.add(card1);
         theCards.add(card2);
         theCards.add(card3);
-        Hand newHand = new Hand();
+        Hand newHand = Dependencies.hand.make();
         newHand.addCard(card1);
         newHand.addCard(card2);
         newHand.addCard(card3);
@@ -56,7 +57,7 @@ public class HandTest {
     @Test
     public void obscures_first_card_when_hidebottom_is_true() {
         HashSet<Card> theCards = new HashSet<Card>();
-        Hand newHand = new Hand();
+        Hand newHand = Dependencies.hand.make();
         String expectedHand = card2.toString() + card3.toString();
 
         newHand.addCard(card1);
@@ -69,7 +70,7 @@ public class HandTest {
     @Test
     public void does_not_obscure_first_card_when_hidebottom_is_false() {
         HashSet<Card> theCards = new HashSet<Card>();
-        Hand newHand = new Hand();
+        Hand newHand = Dependencies.hand.make();
         String expectedHand = card1.toString() + card2.toString() + card3.toString();
 
         newHand.addCard(card1);

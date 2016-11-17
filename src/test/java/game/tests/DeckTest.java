@@ -22,7 +22,7 @@ public class DeckTest {
 
     @Test
     public void has_fifty_two_cards() {
-        Deck deck = new Deck();
+        Deck deck = Dependencies.deck.make();
 
         assertEquals(cardsInDeck, deck.length());
     }
@@ -32,7 +32,7 @@ public class DeckTest {
 
     {
         Boolean cardMissing = false;
-        Deck deck = new Deck();
+        Deck deck = Dependencies.deck.make();
         List<Card> theDeck = new ArrayList<Card>();
         theDeck = getDeck(deck);
 
@@ -53,7 +53,7 @@ public class DeckTest {
 
     @Test
     public void has_one_less_card_after_deal() throws OutOfCardsError {
-        Deck deck = new Deck();
+        Deck deck = Dependencies.deck.make();
         int length1 = deck.length();
 
         deck.dealCard();
@@ -64,7 +64,7 @@ public class DeckTest {
     @Test
     public void is_in_a_new_order_after_shuffle() throws OutOfCardsError {
         /* put a pristine deck into an array */
-        Deck deck = new Deck();
+        Deck deck = Dependencies.deck.make();
         Random random = Dependencies.random.make(Integer.toString(seedForTest));
 
         deck.shuffle(new Random(seedForTest));
@@ -77,7 +77,7 @@ public class DeckTest {
 
     @Test
     public void throws_out_of_cards_error() {
-        Deck theDeck = new Deck();
+        Deck theDeck = Dependencies.deck.make();
         Boolean hasError = false;
 
         for (int i = 0; i < cardsInDeck + 1; i++) {
@@ -92,13 +92,13 @@ public class DeckTest {
 
     @Test
     public void contains_same_cards_after_shuffle() throws OutOfCardsError {
-        Deck myDeck = new Deck();
+        Deck myDeck = Dependencies.deck.make();
 
         List<Card> theDeck = new ArrayList<Card>();
         theDeck = getDeck(myDeck);
         Set initSet = new HashSet(theDeck);
 
-        myDeck = new Deck();
+        myDeck = Dependencies.deck.make();
         List<Card> theDeck2 = new ArrayList<Card>();
         theDeck2 = getDeck(myDeck);
         Set shuffledSet = new HashSet(theDeck2);
