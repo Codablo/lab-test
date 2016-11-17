@@ -63,7 +63,6 @@ public class Dependencies {
     });
 
     public static final InstanceFactory<HumanPlayer> humanPlayer = new InstanceFactory<>(new BuildFunction<HumanPlayer>() {
-        private HumanPlayer humanPlayer = null;
 
         @Override
         public HumanPlayer build() {
@@ -72,7 +71,6 @@ public class Dependencies {
     });
 
     public static final InstanceFactory<BotPlayer> botPlayer = new InstanceFactory<>(new BuildFunction<BotPlayer>() {
-        private BotPlayer botPlayer = null;
 
         @Override
         public BotPlayer build() {
@@ -85,6 +83,21 @@ public class Dependencies {
         @Override
         public Score build() {
             return new Score();
+        }
+    });
+
+    public static final InstanceFactory<Operations> operations = new InstanceFactory<>(new BuildFunction<Operations>() {
+
+        @Override
+        public Operations build() {
+            return new Operations();
+        }
+    });
+    public static final InstanceFactory<BlackJackGame> blackJackGame = new InstanceFactory<>(new BuildFunction<BlackJackGame>() {
+
+        @Override
+        public BlackJackGame build() {
+            return new BlackJackGame();
         }
     });
 }

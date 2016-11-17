@@ -43,6 +43,20 @@ public class ScoreTest {
     Card card1 = new Card(Suite.Clubs, Rank.Eight);
     Card card2 = new Card(Suite.Diamonds, Rank.Jack);
     Card card3 = new Card(Suite.Diamonds, Rank.Ace);
+    Card card4 = new Card(Suite.Hearts, Rank.Seven);
+
+    @Test
+    public void calculates_correct_score() {
+        HashSet<Card> theCards = new HashSet<>();
+        theCards.add(card1);
+        theCards.add(card4);
+        Score theScore = Dependencies.score.make();
+
+        when(mockedHand.getCards()).thenReturn(theCards);
+
+        assertEquals(theScore.getScore(mockedHand), 15);
+
+    }
 
     @Test
     public void hand_with_ace_over_21_subtracts_10() {
@@ -67,5 +81,15 @@ public class ScoreTest {
         when(mockedHand.getCards()).thenReturn(theCards);
 
         assertEquals(theScore.getScore(mockedHand), 21);
+    }
+
+    @Test
+    public void returns_0_for_empty_hand() {
+        HashSet<Card> theCards = new HashSet<>();
+        Score theScore = Dependencies.score.make();
+
+        when(mockedHand.getCards()).thenReturn(theCards);
+
+        assertEquals(theScore.getScore(mockedHand), 0);
     }
 }
