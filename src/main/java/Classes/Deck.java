@@ -14,15 +14,15 @@ public class Deck implements DeckI {
     static final int cardsPerDeck = 52;
     int cardsRemaining;
     //LinkedHashMap<Card, Card> cards = new LinkedHashMap<>();
-    List<Card> theCards = new ArrayList<Card>();
+    List<Card> cards = new ArrayList<Card>();
 
     public Deck() {
         cardsRemaining = 0;
         /* add all cards in suite/rank order */
         for (Rank rnk : Rank.values()) {
             for (Suite suite : Suite.values()) {
-                Card theCard = new Card(suite, rnk);
-                theCards.add(theCard);
+                Card card = new Card(suite, rnk);
+                cards.add(card);
                 cardsRemaining = cardsRemaining + 1;
             }
         }
@@ -38,9 +38,9 @@ public class Deck implements DeckI {
         for (int j = 0; j < 150; j++) {
             int randomInt1 = theRand.nextInt(cardsPerDeck - 1);
             int randomInt2 = theRand.nextInt(cardsPerDeck - 1);
-            Card saveCard = theCards.get(randomInt1);
-            theCards.set(randomInt1, theCards.get(randomInt2));
-            theCards.set(randomInt2, saveCard);
+            Card saveCard = cards.get(randomInt1);
+            cards.set(randomInt1, cards.get(randomInt2));
+            cards.set(randomInt2, saveCard);
         }
     }
 
@@ -48,8 +48,8 @@ public class Deck implements DeckI {
     public Card dealCard() throws OutOfCardsError {
         if (cardsRemaining == 0) throw new OutOfCardsError();
         cardsRemaining = cardsRemaining - 1;
-        Card theCard = theCards.get(0);
-        theCards.remove(0);
+        Card theCard = cards.get(0);
+        cards.remove(0);
         return theCard;
     }
 
@@ -72,8 +72,8 @@ public class Deck implements DeckI {
     @Override
     public String toString() {
         String deckString = "";
-        for (int i = 0; i < theCards.size(); i++) {
-            deckString = deckString + theCards.get(i).toString();
+        for (int i = 0; i < cards.size(); i++) {
+            deckString = deckString + cards.get(i).toString();
         }
         return deckString;
     }

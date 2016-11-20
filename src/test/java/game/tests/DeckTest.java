@@ -33,15 +33,15 @@ public class DeckTest {
     {
         Boolean cardMissing = false;
         Deck deck = Dependencies.deck.make();
-        List<Card> theDeck = new ArrayList<Card>();
-        theDeck = getDeck(deck);
+        List<Card> compDeck = new ArrayList<Card>();
+        compDeck = getDeck(deck);
 
         for (Suite suite : Suite.values()) {
             for (Rank rnk : Rank.values()) {
                 Card theCard = new Card(suite, rnk);
                 Boolean cardFound = false;
-                for (int i = 0; i < theDeck.size(); i++) {
-                    Card theDeckCard = theDeck.get(i);
+                for (int i = 0; i < compDeck.size(); i++) {
+                    Card theDeckCard = compDeck.get(i);
                     if (theDeckCard.equals(theCard)) cardFound = true;
                 }
                 if (!cardFound) cardMissing = true;
@@ -67,7 +67,7 @@ public class DeckTest {
         Deck deck = Dependencies.deck.make();
         Random random = Dependencies.random.make(Integer.toString(seedForTest));
 
-        deck.shuffle(new Random(seedForTest));
+        deck.shuffle(random);
 
         assertEquals(deck.dealCard(), new Card(Suite.Clubs, Rank.Ace));
         assertEquals(deck.dealCard(), new Card(Suite.Diamonds, Rank.Two));
@@ -77,12 +77,12 @@ public class DeckTest {
 
     @Test
     public void throws_out_of_cards_error() {
-        Deck theDeck = Dependencies.deck.make();
+        Deck deck = Dependencies.deck.make();
         Boolean hasError = false;
 
         for (int i = 0; i < cardsInDeck + 1; i++) {
             try {
-                theDeck.dealCard();
+                deck.dealCard();
             } catch (OutOfCardsError outOfCardsError) {
                 hasError = true;
             }
@@ -94,24 +94,24 @@ public class DeckTest {
     public void contains_same_cards_after_shuffle() throws OutOfCardsError {
         Deck myDeck = Dependencies.deck.make();
 
-        List<Card> theDeck = new ArrayList<Card>();
-        theDeck = getDeck(myDeck);
-        Set initSet = new HashSet(theDeck);
+        List<Card> deck = new ArrayList<Card>();
+        deck = getDeck(myDeck);
+        Set initSet = new HashSet(deck);
 
         myDeck = Dependencies.deck.make();
-        List<Card> theDeck2 = new ArrayList<Card>();
-        theDeck2 = getDeck(myDeck);
-        Set shuffledSet = new HashSet(theDeck2);
+        List<Card> compDeck = new ArrayList<Card>();
+        compDeck = getDeck(myDeck);
+        Set shuffledSet = new HashSet(compDeck);
 
-        assertEquals(initSet,shuffledSet);
+        assertEquals(initSet, shuffledSet);
     }
 
     //helper method to get a copy of the deck//
-    public List<Card> getDeck(Deck theDeck) throws OutOfCardsError {
+    public List<Card> getDeck(Deck deck) throws OutOfCardsError {
         List<Card> copyDeck = new ArrayList<Card>();
 
-        for (int i = 0; i < cardsInDeck ; i++) {
-            copyDeck.add(theDeck.dealCard());
+        for (int i = 0; i < cardsInDeck; i++) {
+            copyDeck.add(deck.dealCard());
         }
         return (copyDeck);
     }

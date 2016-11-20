@@ -19,13 +19,25 @@ import static org.mockito.Mockito.*;
  */
 public class HumanTest {
 
-    protected Hand mockedHand = null;
+    protected Hand mockedHumanHand = null;
+    protected Hand mockedBotHand = null;
     protected Prompt mockedPrompt = null;
     protected ConsoleIO mockedConsoleIO = null;
+    protected Operations mockedOps = null;
 
-    public Resettable withMockHand() {
-        mockedHand = mock(Hand.class);
-        return Dependencies.hand.override(() -> mockedHand);
+    public Resettable withMockOps() {
+        mockedOps = mock(Operations.class);
+        return Dependencies.operations.override(() -> mockedOps);
+    }
+
+    public Resettable withMockHumanHand() {
+        mockedHumanHand = mock(Hand.class);
+        return Dependencies.humanhand.override(() -> mockedHumanHand);
+    }
+
+    public Resettable withMockBotHand() {
+        mockedBotHand = mock(Hand.class);
+        return Dependencies.bothand.override(() -> mockedBotHand);
     }
 
     public Resettable withMockPrompt() {
@@ -40,48 +52,65 @@ public class HumanTest {
 
     @Before
     public void setup() {
-        withMockHand();
+        withMockHumanHand();
+        withMockBotHand();
         withMocKConsoleIO();
         withMockPrompt();
+        withMockOps();
     }
 
     @After
     public void tearDown() throws Exception {
-        Dependencies.hand.close();
+        Dependencies.humanhand.close();
+        Dependencies.bothand.close();
+        Dependencies.operations.close();
         Dependencies.console.close();
         Dependencies.prompt.close();
     }
 
     @Test
     public void returns_hit_when_user_enters_h() throws java.io.IOException {
-        HumanPlayer theHuman = Dependencies.humanPlayer.make();
-
+        HumanPlayer humanPlayer = Dependencies.humanPlayer.make();
         when(mockedPrompt.prompt(anyString(), anyString(), anyString())).thenReturn("h");
 
-        assertEquals(theHuman.nextAction(mockedHand), Action.Hit);
+        Action action = humanPlayer.nextAction(mockedBotHand);
+
+        assertEquals(action, Action.Hit);
     }
 
     @Test
     public void returns_stay_when_user_enters_s() throws java.io.IOException {
-        HumanPlayer theHuman = Dependencies.humanPlayer.make();
-
+        HumanPlayer humanPlayer = Dependencies.humanPlayer.make();
         when(mockedPrompt.prompt(anyString(), anyString(), anyString())).thenReturn("s");
 
-        assertEquals(theHuman.nextAction(mockedHand), Action.Stay);
+        Action action = humanPlayer.nextAction(mockedBotHand);
+
+        assertEquals(action, Action.Stay);
     }
 
     @Test
     public void returns_the_correct_hand() {
-        HumanPlayer theHuman = Dependencies.humanPlayer.make();
+        HumanPlayer humanPlayer = Dependencies.humanPlayer.make();
         Card card1 = new Card(Suite.Clubs, Rank.Eight);
         Card card2 = new Card(Suite.Diamonds, Rank.Jack);
-        HashSet<Card> theCards = new HashSet<>();
-        theCards.add(card1);
-        theCards.add(card2);
+        HashSet<Card> expectedCards = new HashSet<>();
+        expectedCards.add(card1);
+        expectedCards.add(card2);
+        when(mockedHumanHand.getCards()).thenReturn(expectedCards);
 
-        when(mockedHand.getCards()).thenReturn(theCards);
+        HashSet<Card> humanCards = new HashSet<>(humanPlayer.getHand().getCards());
 
-        assertEquals(theCards, theHuman.getHand().getCards());
+        assertEquals(expectedCards, humanCards);
+    }
+
+    @Test
+    public void returns_busted_when_busted() {
+        HumanPlayer humanPlayer = Dependencies.humanPlayer.make();
+        when(mockedOps.isPlayerBusted(humanPlayer)).thenReturn(true);
+
+        Action action = humanPlayer.nextAction(mockedHumanHand);
+
+        assertEquals(action, Action.Busted);
     }
 
 }

@@ -40,43 +40,43 @@ public class HandTest {
     }
 
     @Test
-    public void has_the_same_cards_that_where_added() {
-        HashSet<Card> theCards = new HashSet<Card>();
+    public void has_the_same_cards_that_were_added() {
+        HashSet<Card> cards = new HashSet<Card>();
 
-        theCards.add(card1);
-        theCards.add(card2);
-        theCards.add(card3);
+        cards.add(card1);
+        cards.add(card2);
+        cards.add(card3);
         Hand newHand = Dependencies.hand.make();
         newHand.addCard(card1);
         newHand.addCard(card2);
         newHand.addCard(card3);
 
-        assertEquals(theCards, newHand.getCards());
+        assertEquals(cards, newHand.getCards());
     }
 
     @Test
-    public void obscures_first_card_when_hidebottom_is_true() {
-        HashSet<Card> theCards = new HashSet<Card>();
+    public void obscures_first_card_when_hiding_bottom() {
         Hand newHand = Dependencies.hand.make();
-        String expectedHand = card2.toString() + card3.toString();
+        String expectedHand = "xxx," + card2.toString() + "," + card3.toString();
 
         newHand.addCard(card1);
         newHand.addCard(card2);
         newHand.addCard(card3);
-        String thevisHand = newHand.visibleHand(true);
-        assertEquals(thevisHand, expectedHand);
+        String visibleHand = newHand.visibleHand(true);
+
+        assertEquals(visibleHand, expectedHand);
     }
 
     @Test
-    public void does_not_obscure_first_card_when_hidebottom_is_false() {
-        HashSet<Card> theCards = new HashSet<Card>();
+    public void does_not_obscure_first_card_when_not_hidingbottom() {
         Hand newHand = Dependencies.hand.make();
-        String expectedHand = card1.toString() + card2.toString() + card3.toString();
+        String expectedHand = card1.toString() + "," + card2.toString() + "," + card3.toString();
 
         newHand.addCard(card1);
         newHand.addCard(card2);
         newHand.addCard(card3);
-        String thevisHand = newHand.visibleHand(false);
-        assertEquals(thevisHand, expectedHand);
+        String visibleHand = newHand.visibleHand(false);
+
+        assertEquals(visibleHand, expectedHand);
     }
 }

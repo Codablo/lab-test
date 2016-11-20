@@ -17,36 +17,39 @@ import java.util.Set;
  */
 public class Hand implements HandI {
 
-    List<Card> theHand = new ArrayList<Card>();
+    List<Card> hand = new ArrayList<Card>();
 
     @Override
     public String visibleHand(boolean hideBottom) {
-        String visibleHandStr = "";
+        String visibleHandString = "";
 
-        for (int i = 0; i < theHand.size(); i++) {
-            Card theDeckCard = theHand.get(i);
+        for (int i = 0; i < hand.size(); i++) {
+            Card theDeckCard = hand.get(i);
             if (!hideBottom && i == 0) {
-                visibleHandStr = visibleHandStr + theDeckCard.toString();
+                visibleHandString = visibleHandString + theDeckCard.toString();
+            }
+            if (hideBottom && i == 0) {
+                visibleHandString = visibleHandString + "xxx";
             }
             if (i > 0) {
-                visibleHandStr = visibleHandStr + theDeckCard.toString();
+                visibleHandString = visibleHandString + "," + theDeckCard.toString();
             }
         }
-        return visibleHandStr;
+        return visibleHandString;
     }
 
     @Override
-    public void addCard(Card theCard) {
-        theHand.add(theCard);
+    public void addCard(Card card) {
+        hand.add(card);
     }
 
     @Override
     public int size() {
-        return theHand.size();
+        return hand.size();
     }
 
     @Override
     public Set<Card> getCards() {
-        return new HashSet<Card>(theHand);
+        return new HashSet<Card>(hand);
     }
 }

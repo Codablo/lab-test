@@ -15,8 +15,8 @@ public class ConsoleIO implements ConsoleI {
     public String readString;
 
     @Override
-    public void writeToConsole(String theOutput) {
-        System.out.println(theOutput);
+    public void writeToConsole(String output) {
+        System.out.println(output);
     }
 
     @Override

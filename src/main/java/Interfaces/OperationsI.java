@@ -7,13 +7,13 @@ import enums.Outcome;
  * Created by mikehollibaugh on 11/17/16.
  */
 public interface OperationsI {
-    void dealCardToPlayer(PlayerI thePlayer, Deck theDeck)throws OutOfCardsError;
+    void dealCardToPlayer(PlayerI player, Deck deck) throws OutOfCardsError;
 
-    boolean isPlayerBusted(PlayerI thePlayer);
+    boolean isPlayerBusted(PlayerI player);
 
-    void completeDealToPlayer(PlayerI player,PlayerI otherPlayer, Deck theDeck)throws OutOfCardsError ;
+    void completeDealToPlayer(PlayerI player, PlayerI otherPlayer, Deck theDeck) throws OutOfCardsError;
 
-    Outcome getWinner(HumanPlayer theHuman, BotPlayer theBot);
+    Outcome getWinner(HumanPlayer human, BotPlayer bot);
 
-    boolean handHasBlackJack(Hand theHand);
+    boolean handHasBlackJack(Hand hand);
 }

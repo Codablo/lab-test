@@ -50,11 +50,10 @@ public class ScoreTest {
         HashSet<Card> theCards = new HashSet<>();
         theCards.add(card1);
         theCards.add(card4);
-        Score theScore = Dependencies.score.make();
-
+        Score score = Dependencies.score.make();
         when(mockedHand.getCards()).thenReturn(theCards);
 
-        assertEquals(theScore.getScore(mockedHand), 15);
+        assertEquals(score.getScore(mockedHand), 15);
 
     }
 
@@ -64,11 +63,10 @@ public class ScoreTest {
         theCards.add(card1);
         theCards.add(card2);
         theCards.add(card3);
-        Score theScore = Dependencies.score.make();
-
+        Score score = Dependencies.score.make();
         when(mockedHand.getCards()).thenReturn(theCards);
 
-        assertEquals(theScore.getScore(mockedHand), 19);
+        assertEquals(score.getScore(mockedHand), 19);
     }
 
     @Test
@@ -76,20 +74,18 @@ public class ScoreTest {
         HashSet<Card> theCards = new HashSet<>();
         theCards.add(card2);
         theCards.add(card3);
-        Score theScore = Dependencies.score.make();
-
+        Score score = Dependencies.score.make();
         when(mockedHand.getCards()).thenReturn(theCards);
 
-        assertEquals(theScore.getScore(mockedHand), 21);
+        assertEquals(score.getScore(mockedHand), 21);
     }
 
     @Test
     public void returns_0_for_empty_hand() {
         HashSet<Card> theCards = new HashSet<>();
-        Score theScore = Dependencies.score.make();
-
+        Score score = Dependencies.score.make();
         when(mockedHand.getCards()).thenReturn(theCards);
 
-        assertEquals(theScore.getScore(mockedHand), 0);
+        assertEquals(score.getScore(mockedHand), 0);
     }
 }

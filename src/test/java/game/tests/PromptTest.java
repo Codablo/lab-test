@@ -45,27 +45,27 @@ public class PromptTest {
         Prompt thePrompt = Dependencies.prompt.make();
         when(mockedConsoleIO.readFromConsole()).thenReturn(theInputString + "    ");
 
-        String theInput = thePrompt.prompt(promptString, theRegex, defaultInput);
+        String input = thePrompt.prompt(promptString, theRegex, defaultInput);
 
-        assertEquals(theInput, theInputString);
+        assertEquals(input, theInputString);
     }
 
     @Test
     public void input_with_all_white_space_returns_default_response() throws IOException {
-        Prompt thePrompt = Dependencies.prompt.make();
+        Prompt prompt = Dependencies.prompt.make();
         when(mockedConsoleIO.readFromConsole()).thenReturn("    ");
 
-        String theInput = thePrompt.prompt(promptString, theRegex, defaultInput);
+        String theInput = prompt.prompt(promptString, theRegex, defaultInput);
 
         assertEquals(theInput, defaultInput);
     }
 
     @Test
     public void string_is_written_to_console() throws IOException {
-        Prompt thePrompt = Dependencies.prompt.make();
+        Prompt prompt = Dependencies.prompt.make();
         when(mockedConsoleIO.readFromConsole()).thenReturn(theInputString);
 
-        thePrompt.prompt(promptString, theRegex, defaultInput);
+        prompt.prompt(promptString, theRegex, defaultInput);
 
         verify(mockedConsoleIO).writeToConsole(promptString);
     }
@@ -73,9 +73,9 @@ public class PromptTest {
     @Test
     public void returns_a_character_if_it_is_in_the_allowed_characters() throws IOException {
         when(mockedConsoleIO.readFromConsole()).thenReturn("a");
-        Prompt thePrompt = Dependencies.prompt.make();
+        Prompt prompt = Dependencies.prompt.make();
 
-        String inputString = thePrompt.prompt(promptString, theRegex, defaultInput);
+        String inputString = prompt.prompt(promptString, theRegex, defaultInput);
 
         assertTrue(inputString.equals(theInputString));
     }
@@ -83,9 +83,9 @@ public class PromptTest {
     @Test
     public void returns_default_character_if_nothing_is_entered() throws IOException {
         when(mockedConsoleIO.readFromConsole()).thenReturn("");
-        Prompt thePrompt = Dependencies.prompt.make();
+        Prompt prompt = Dependencies.prompt.make();
 
-        String inputString = thePrompt.prompt(promptString, theRegex, defaultInput);
+        String inputString = prompt.prompt(promptString, theRegex, defaultInput);
 
         assertTrue(inputString.equals(defaultInput));
     }
@@ -93,9 +93,9 @@ public class PromptTest {
     @Test
     public void repeats_prompt_until_valid_charcter_is_entered() throws IOException {
         when(mockedConsoleIO.readFromConsole()).thenReturn("z", "x", "a");
-        Prompt thePrompt = Dependencies.prompt.make();
+        Prompt prompt = Dependencies.prompt.make();
 
-        thePrompt.prompt(promptString, theRegex, defaultInput);
+        prompt.prompt(promptString, theRegex, defaultInput);
 
         verify(mockedConsoleIO, times(3)).readFromConsole();
     }
@@ -106,9 +106,9 @@ public class PromptTest {
             when(mockedConsoleIO.readFromConsole()).thenThrow(new IOException());
         } catch (IOException e) {
         }
-        Prompt thePrompt = Dependencies.prompt.make();
+        Prompt prompt = Dependencies.prompt.make();
 
-        String inputString = thePrompt.prompt(promptString, theRegex, defaultInput);
+        String inputString = prompt.prompt(promptString, theRegex, defaultInput);
 
         assertTrue(inputString.equals(defaultInput));
     }

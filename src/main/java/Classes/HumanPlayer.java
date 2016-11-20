@@ -7,14 +7,20 @@ import enums.Action;
  * Created by mikehollibaugh on 11/16/16.
  */
 public class HumanPlayer implements PlayerI {
-    Hand humanHand = Dependencies.hand.make();
-    Prompt humanPrompt = Dependencies.prompt.make();
+    private Hand humanHand = Dependencies.humanhand.make();
+    private Prompt humanPrompt = Dependencies.prompt.make();
+    private Score score = Dependencies.score.make();
 
     @Override
     public Action nextAction(Hand otherHand) {
-        String actions = "BOT Player Hand: " + otherHand.visibleHand(true) + ", press h to Hit or s to Stay:";
+        String actions = "Your Hand: {" + score.getScore(humanHand) + "} " + humanHand.visibleHand(false) +
+                "\nBOT Player Hand: " + otherHand.visibleHand(true) + ",\npress h to Hit or s to Stay:";
         String validActions = "[" + Action.Stay.text + Action.Hit.text + "]";
         String userResponse = humanPrompt.prompt(actions, validActions, Action.Stay.text);
+        Operations blackJackOps = Dependencies.operations.make();
+        if (blackJackOps.isPlayerBusted(this)) {
+            return Action.Busted;
+        }
 
         if (userResponse.equals(Action.Stay.text)) {
             return Action.Stay;

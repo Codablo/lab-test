@@ -17,12 +17,11 @@ public class Dependencies {
 
         @Override
         public Random build(String A) {
-            if (random == null)
-                if (A.isEmpty()) {
-                    random = new Random();
-                } else {
-                    random = new Random(Integer.parseInt(A));
-                }
+            if (A.isEmpty()) {
+                random = new Random();
+            } else {
+                random = new Random(Integer.parseInt(A));
+            }
             return random;
         }
     });
@@ -43,6 +42,22 @@ public class Dependencies {
         @Override
         public Deck build() {
             return new Deck();
+        }
+    });
+
+    public static final InstanceFactory<Hand> humanhand = new InstanceFactory<>(new BuildFunction<Hand>() {
+
+        @Override
+        public Hand build() {
+            return new Hand();
+        }
+    });
+
+    public static final InstanceFactory<Hand> bothand = new InstanceFactory<>(new BuildFunction<Hand>() {
+
+        @Override
+        public Hand build() {
+            return new Hand();
         }
     });
 
@@ -93,6 +108,7 @@ public class Dependencies {
             return new Operations();
         }
     });
+
     public static final InstanceFactory<BlackJackGame> blackJackGame = new InstanceFactory<>(new BuildFunction<BlackJackGame>() {
 
         @Override

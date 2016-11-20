@@ -10,7 +10,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class ActionTest {
     @Test
-    public void action_returns_string_value() {
+    public void returns_string_value() {
         assertTrue(Action.Stay.text.equals("s"));
         assertTrue(Action.Hit.text.equals("h"));
     }

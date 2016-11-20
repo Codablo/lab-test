@@ -10,7 +10,7 @@ import java.util.Random;
  */
 public interface DeckI {
 
-    void shuffle(Random theRand);
+    void shuffle(Random random);
 
     Card dealCard() throws OutOfCardsError;
 }

@@ -16,7 +16,7 @@ public interface HandI {
 
     public String visibleHand(boolean hideBottom);
 
-    public void addCard(Card theCard);
+    public void addCard(Card card);
 
     public int size();
 

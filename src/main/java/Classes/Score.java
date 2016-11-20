@@ -15,9 +15,9 @@ public class Score implements ScoreI {
         HashSet<Card> theCards = new HashSet<>(theHand.getCards());
         int tempScore = 0;
         int acesFound = 0;
-        for (Card theCard : theCards) {
-            tempScore = tempScore + theCard.rank.code;
-            if (theCard.rank == Rank.Ace) {
+        for (Card card : theCards) {
+            tempScore = tempScore + card.rank.code;
+            if (card.rank == Rank.Ace) {
                 acesFound++;
             }
         }
