@@ -17,10 +17,8 @@ import static org.mockito.Mockito.*;
 public class BlackJackGameTest {
 
 
-    protected Hand mockedHand = null;
     protected BotPlayer mockedBotPlayer = null;
     protected HumanPlayer mockedHumanPlayer = null;
-    protected Score mockedScore = null;
     protected Deck mockedDeck = null;
     protected Prompt mockedPrompt = null;
     protected ConsoleIO mockedConsole = null;
@@ -51,11 +49,6 @@ public class BlackJackGameTest {
     public Resettable withMockBotHand() {
         mockedBotHand = mock(Hand.class);
         return Dependencies.bothand.override(() -> mockedBotHand);
-    }
-
-    public Resettable withMockScore() {
-        mockedScore = mock(Score.class);
-        return Dependencies.score.override(() -> mockedScore);
     }
 
     public Resettable withMockBotPlayer() {

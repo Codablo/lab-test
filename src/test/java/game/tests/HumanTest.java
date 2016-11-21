@@ -69,7 +69,7 @@ public class HumanTest {
     }
 
     @Test
-    public void returns_hit_when_user_enters_h() throws java.io.IOException {
+    public void nextAction_is_hit_when_user_enters_h() throws java.io.IOException {
         HumanPlayer humanPlayer = Dependencies.humanPlayer.make();
         when(mockedPrompt.prompt(anyString(), anyString(), anyString())).thenReturn("h");
 
@@ -79,7 +79,7 @@ public class HumanTest {
     }
 
     @Test
-    public void returns_stay_when_user_enters_s() throws java.io.IOException {
+    public void nextAction_is_stay_when_user_enters_s() throws java.io.IOException {
         HumanPlayer humanPlayer = Dependencies.humanPlayer.make();
         when(mockedPrompt.prompt(anyString(), anyString(), anyString())).thenReturn("s");
 
@@ -89,13 +89,13 @@ public class HumanTest {
     }
 
     @Test
-    public void returns_the_correct_hand() {
+    public void getCards_returns_the_correct_hand() {
         HumanPlayer humanPlayer = Dependencies.humanPlayer.make();
-        Card card1 = new Card(Suite.Clubs, Rank.Eight);
-        Card card2 = new Card(Suite.Diamonds, Rank.Jack);
+        Card eightOfClubs = new Card(Suite.Clubs, Rank.Eight);
+        Card jackOfDiamonds = new Card(Suite.Diamonds, Rank.Jack);
         HashSet<Card> expectedCards = new HashSet<>();
-        expectedCards.add(card1);
-        expectedCards.add(card2);
+        expectedCards.add(eightOfClubs);
+        expectedCards.add(jackOfDiamonds);
         when(mockedHumanHand.getCards()).thenReturn(expectedCards);
 
         HashSet<Card> humanCards = new HashSet<>(humanPlayer.getHand().getCards());
@@ -104,7 +104,7 @@ public class HumanTest {
     }
 
     @Test
-    public void returns_busted_when_busted() {
+    public void nextAction_is_busted_when_score_greater_than_21() {
         HumanPlayer humanPlayer = Dependencies.humanPlayer.make();
         when(mockedOps.isPlayerBusted(humanPlayer)).thenReturn(true);
 

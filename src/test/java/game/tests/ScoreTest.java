@@ -40,16 +40,16 @@ public class ScoreTest {
         Dependencies.hand.close();
     }
 
-    Card card1 = new Card(Suite.Clubs, Rank.Eight);
-    Card card2 = new Card(Suite.Diamonds, Rank.Jack);
-    Card card3 = new Card(Suite.Diamonds, Rank.Ace);
-    Card card4 = new Card(Suite.Hearts, Rank.Seven);
+    Card eightOfClubs = new Card(Suite.Clubs, Rank.Eight);
+    Card jackOfDiamonds = new Card(Suite.Diamonds, Rank.Jack);
+    Card aceOfDiamonds = new Card(Suite.Diamonds, Rank.Ace);
+    Card sevenOfHearts = new Card(Suite.Hearts, Rank.Seven);
 
     @Test
     public void calculates_correct_score() {
         HashSet<Card> theCards = new HashSet<>();
-        theCards.add(card1);
-        theCards.add(card4);
+        theCards.add(eightOfClubs);
+        theCards.add(sevenOfHearts);
         Score score = Dependencies.score.make();
         when(mockedHand.getCards()).thenReturn(theCards);
 
@@ -60,9 +60,9 @@ public class ScoreTest {
     @Test
     public void hand_with_ace_over_21_subtracts_10() {
         HashSet<Card> theCards = new HashSet<>();
-        theCards.add(card1);
-        theCards.add(card2);
-        theCards.add(card3);
+        theCards.add(eightOfClubs);
+        theCards.add(jackOfDiamonds);
+        theCards.add(aceOfDiamonds);
         Score score = Dependencies.score.make();
         when(mockedHand.getCards()).thenReturn(theCards);
 
@@ -72,8 +72,8 @@ public class ScoreTest {
     @Test
     public void hand_with_ace_adds_11() {
         HashSet<Card> theCards = new HashSet<>();
-        theCards.add(card2);
-        theCards.add(card3);
+        theCards.add(jackOfDiamonds);
+        theCards.add(aceOfDiamonds);
         Score score = Dependencies.score.make();
         when(mockedHand.getCards()).thenReturn(theCards);
 
