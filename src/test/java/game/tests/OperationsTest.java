@@ -103,14 +103,13 @@ public class OperationsTest {
 
     @Test
     public void blackjack_is_not_detected_for_score_of_21_with_more_than_2_cards() {
-        Operations blackJackOps = Dependencies.operations.make();
-        HashSet<Card> cards = new HashSet<>();
-        cards.add(aecOfClubs);
-        cards.add(jackOfDiamonds);
-        cards.add(eightOfDiamonds);
-
         try (Resettable r1 = withMockHand();
              Resettable r2 = withMockScore()) {
+            Operations blackJackOps = Dependencies.operations.make();
+            HashSet<Card> cards = new HashSet<>();
+            cards.add(aecOfClubs);
+            cards.add(jackOfDiamonds);
+            cards.add(eightOfDiamonds);
             when(mockedHand.getCards()).thenReturn(cards);
             when(mockedScore.getScore(any())).thenReturn(blackJackScore);
             when(mockedHand.size()).thenReturn(cards.size());
@@ -121,14 +120,13 @@ public class OperationsTest {
 
     @Test
     public void blackjack_is_not_detected_for_score_not_equal_to_21() {
-        Operations blackJackOps = Dependencies.operations.make();
-        HashSet<Card> theCards = new HashSet<>();
-        theCards.add(aecOfClubs);
-        theCards.add(jackOfDiamonds);
-        theCards.add(eightOfDiamonds);
-
         try (Resettable r1 = withMockHand();
              Resettable r2 = withMockScore()) {
+            Operations blackJackOps = Dependencies.operations.make();
+            HashSet<Card> theCards = new HashSet<>();
+            theCards.add(aecOfClubs);
+            theCards.add(jackOfDiamonds);
+            theCards.add(eightOfDiamonds);
             when(mockedHand.getCards()).thenReturn(theCards);
             when(mockedScore.getScore(any())).thenReturn(blackJackScore - 1);
             when(mockedHand.size()).thenReturn(theCards.size());
@@ -139,17 +137,15 @@ public class OperationsTest {
 
     @Test
     public void player_is_busted_when_score_exceeds_21() {
-
-        Operations blackJackOps = Dependencies.operations.make();
-        HashSet<Card> cards = new HashSet<>();
-        cards.add(aecOfClubs);
-        cards.add(jackOfDiamonds);
-        cards.add(eightOfDiamonds);
-        cards.add(sevenOfHearts);
-
         try (Resettable r1 = withMockHand();
              Resettable r2 = withMockScore();
              Resettable r3 = withMockHumanPlayer()) {
+            Operations blackJackOps = Dependencies.operations.make();
+            HashSet<Card> cards = new HashSet<>();
+            cards.add(aecOfClubs);
+            cards.add(jackOfDiamonds);
+            cards.add(eightOfDiamonds);
+            cards.add(sevenOfHearts);
             when(mockedHand.getCards()).thenReturn(cards);
             when(mockedScore.getScore(any())).thenReturn(summOfallCards);
 
@@ -159,15 +155,13 @@ public class OperationsTest {
 
     @Test
     public void player_is_not_busted_when_score_equals_21() {
-
-        Operations blackJackOps = Dependencies.operations.make();
-        HashSet<Card> cards = new HashSet<>();
-        cards.add(aecOfClubs);
-        cards.add(jackOfDiamonds);
-
         try (Resettable r1 = withMockHand();
              Resettable r2 = withMockScore();
              Resettable r3 = withMockHumanPlayer()) {
+            Operations blackJackOps = Dependencies.operations.make();
+            HashSet<Card> cards = new HashSet<>();
+            cards.add(aecOfClubs);
+            cards.add(jackOfDiamonds);
             when(mockedHand.getCards()).thenReturn(cards);
             when(mockedScore.getScore(any())).thenReturn(blackJackScore);
 
@@ -177,15 +171,13 @@ public class OperationsTest {
 
     @Test
     public void player_is_not_busted_when_score_under_21() {
-
-        Operations blackJackOps = Dependencies.operations.make();
-        HashSet<Card> cards = new HashSet<>();
-        cards.add(eightOfDiamonds);
-        cards.add(sevenOfHearts);
-
         try (Resettable r1 = withMockHand();
              Resettable r2 = withMockScore();
              Resettable r3 = withMockHumanPlayer()) {
+            Operations blackJackOps = Dependencies.operations.make();
+            HashSet<Card> cards = new HashSet<>();
+            cards.add(eightOfDiamonds);
+            cards.add(sevenOfHearts);
             when(mockedHand.getCards()).thenReturn(cards);
             when(mockedScore.getScore(any())).thenReturn(15);
 
@@ -195,12 +187,10 @@ public class OperationsTest {
 
     @Test
     public void player_is_dealt_a_card() throws OutOfCardsError {
-
-        Operations blackJackOps = Dependencies.operations.make();
-
         try (Resettable r1 = withMockHand();
              Resettable r3 = withMockHumanPlayer();
              Resettable r4 = withMockDecK()) {
+            Operations blackJackOps = Dependencies.operations.make();
             when(mockedDeck.dealCard()).thenReturn(aecOfClubs).thenReturn(jackOfDiamonds);
             when(mockedHumanPlayer.getHand()).thenReturn(mockedHand);
 
@@ -213,7 +203,6 @@ public class OperationsTest {
 
     @Test
     public void deals_card_to_player_until_stay() throws OutOfCardsError, IOException {
-
         try (Resettable r1 = withMockHand();
              Resettable r2 = withMockConsole();
              Resettable r3 = withMockHumanPlayer();
@@ -235,7 +224,6 @@ public class OperationsTest {
 
     @Test
     public void deals_card_to_player_until_busted() throws OutOfCardsError, IOException {
-
         try (Resettable r1 = withMockHand();
              Resettable r2 = withMockConsole();
              Resettable r3 = withMockHumanPlayer();
@@ -258,7 +246,6 @@ public class OperationsTest {
 
     @Test
     public void player_wins_with_blackjack_and_other_player_has_21() {
-
         try (Resettable r1 = withMockHumanHand();
              Resettable r2 = withMockHumanPlayer();
              Resettable r3 = withMockBotPlayer();
@@ -279,7 +266,6 @@ public class OperationsTest {
 
     @Test
     public void result_is_push_if_both_players_have_blackjack() {
-
         try (Resettable r1 = withMockHumanHand();
              Resettable r2 = withMockHumanPlayer();
              Resettable r3 = withMockBotPlayer();
@@ -300,7 +286,6 @@ public class OperationsTest {
 
     @Test
     public void result_is_push_if_both_players_have_equal_score() {
-
         try (Resettable r1 = withMockHumanHand();
              Resettable r2 = withMockHumanPlayer();
              Resettable r3 = withMockBotPlayer();
@@ -321,7 +306,6 @@ public class OperationsTest {
 
     @Test
     public void player_with_highest_score_wins() {
-
         try (Resettable r1 = withMockHumanHand();
              Resettable r2 = withMockHumanPlayer();
              Resettable r3 = withMockBotPlayer();

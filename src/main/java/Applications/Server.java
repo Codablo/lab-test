@@ -11,5 +11,4 @@ public class Server {
         BlackJackGame blackJackGame = Dependencies.blackJackGame.make();
         blackJackGame.play();
     }
-
 }

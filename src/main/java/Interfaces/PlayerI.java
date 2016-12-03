@@ -1,6 +1,8 @@
 package Interfaces;
 
+import Classes.Deck;
 import Classes.Hand;
+import Classes.OutOfCardsError;
 import enums.Action;
 
 /**
@@ -10,5 +12,7 @@ public interface PlayerI {
     public Action nextAction(Hand otherHand);
 
     public Hand getHand();
+
+    public void addCard(Deck deck) throws OutOfCardsError;
 
 }

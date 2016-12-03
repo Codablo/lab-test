@@ -92,9 +92,11 @@ public class BlackJackGameTest {
         }
     }
 
+    // bot_wins_game is not a behavior of play()
     @Test
     public void bot_wins_game() throws OutOfCardsError, IOException {
-
+        //TODO: Refactoring logic can reduce setup.
+        // TODO: Common setup can be centralized in setup method of test class
         try (Resettable r1 = withMockHumanHand();
              Resettable r2 = withMockConsole();
              Resettable r3 = withMockHumanPlayer();

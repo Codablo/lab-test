@@ -13,20 +13,24 @@ public class HumanPlayer implements PlayerI {
 
     @Override
     public Action nextAction(Hand otherHand) {
-        String actions = "Your Hand: {" + score.getScore(humanHand) + "} " + humanHand.visibleHand(false) +
-                "\nBOT Player Hand: " + otherHand.visibleHand(true) + ",\npress h to Hit or s to Stay:";
-        String validActions = "[" + Action.Stay.text + Action.Hit.text + "]";
-        String userResponse = humanPrompt.prompt(actions, validActions, Action.Stay.text);
         Operations blackJackOps = Dependencies.operations.make();
         if (blackJackOps.isPlayerBusted(this)) {
             return Action.Busted;
         }
-
+        String actions = "Your Hand: {" + score.getScore(humanHand) + "} " + humanHand.visibleHand(false) +
+                "\nBOT Player Hand: " + otherHand.visibleHand(true) + ",\npress h to Hit or s to Stay:";
+        String validActions = "[" + Action.Stay.text + Action.Hit.text + "]";
+        String userResponse = humanPrompt.prompt(actions, validActions, Action.Stay.text);
         if (userResponse.equals(Action.Stay.text)) {
             return Action.Stay;
         } else {
             return Action.Hit;
         }
+    }
+
+    @Override
+    public void addCard(Deck deck) throws OutOfCardsError {
+        humanHand.addCard(deck.dealCard());
     }
 
     @Override

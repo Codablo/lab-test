@@ -48,6 +48,7 @@ public class Hand implements HandI {
         return hand.size();
     }
 
+    // TODO: desirable behavior: modifying the returned set is isolated from hand's storage
     @Override
     public Set<Card> getCards() {
         return new HashSet<Card>(hand);

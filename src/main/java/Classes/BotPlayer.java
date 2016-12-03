@@ -25,6 +25,10 @@ public class BotPlayer implements PlayerI {
     }
 
     @Override
+    public void addCard(Deck deck) throws OutOfCardsError {
+        botHand.addCard(deck.dealCard());
+    }
+    @Override
     public Hand getHand() {
         return botHand;
     }
