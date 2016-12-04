@@ -11,9 +11,9 @@ public class BlackJackGame implements BlackJackGameI {
 
     @Override
     public void play() throws OutOfCardsError {
-        Deck gameDeck = Dependencies.deck.make(); // better as an argument, because you become the "owner" of it
+        Deck gameDeck = Dependencies.deck.make();
         HumanPlayer humanPlayer = Dependencies.humanPlayer.make();
-        BotPlayer botPlayer = Dependencies.botPlayer.make(); // same as deck...Game owns these
+        BotPlayer botPlayer = Dependencies.botPlayer.make();
 
         initGame(humanPlayer, botPlayer, gameDeck);
         Action humanAction = dealToHuman(humanPlayer, botPlayer, gameDeck);
@@ -21,18 +21,16 @@ public class BlackJackGame implements BlackJackGameI {
         if (humanAction != Action.Busted) {
             botAction = dealToBot(humanPlayer, botPlayer, gameDeck);
         }
-        computeGameResults(humanPlayer, botPlayer, humanAction, botAction);
-    }
-
-    public void computeGameResults(HumanPlayer humanPlayer, BotPlayer botPlayer, Action humanAction, Action botAction) {
-        Operations blackJackOps = Dependencies.operations.make();
-        Outcome outcome = getOutcome(humanPlayer, botPlayer, humanAction, botAction, blackJackOps);
+        Outcome outcome = getOutcome(humanPlayer, botPlayer, humanAction, botAction);
         displayGameResults(humanPlayer, botPlayer, outcome);
     }
 
     public void displayGameResults(HumanPlayer humanPlayer, BotPlayer botPlayer, Outcome outcome) {
         Score score = Dependencies.score.make();
         ConsoleIO consoleIO = Dependencies.console.make();
+        if (outcome == null) {
+            outcome = Outcome.None;
+        }
 
         if (outcome == Outcome.Push) {
             consoleIO.writeToConsole(String.format("The game is a Push!"));
@@ -40,13 +38,14 @@ public class BlackJackGame implements BlackJackGameI {
             consoleIO.writeToConsole(String.format("The winner is " + outcome.toString() + "!"));
         }
         consoleIO.writeToConsole(String.format("\nYour Hand: (" + score.getScore(humanPlayer.getHand()) + ") " +
-                humanPlayer.getHand().visibleHand(false)));
+                humanPlayer.getVisibleHand(false)));
         consoleIO.writeToConsole(String.format("\nBOT hand: (" + score.getScore(botPlayer.getHand()) + ") " +
-                botPlayer.getHand().visibleHand(false)));
+                botPlayer.getVisibleHand(false)));
     }
 
-    public Outcome getOutcome(HumanPlayer humanPlayer, BotPlayer botPlayer, Action humanAction, Action botAction, Operations blackJackOps) {
+    public Outcome getOutcome(HumanPlayer humanPlayer, BotPlayer botPlayer, Action humanAction, Action botAction) {
         Outcome outcome;
+        Operations blackJackOps = Dependencies.operations.make();
         if (humanAction == Action.Busted) {
             outcome = Outcome.Bot;
         } else if (botAction == Action.Busted) {
@@ -69,7 +68,6 @@ public class BlackJackGame implements BlackJackGameI {
         return botAction;
     }
 
-    // TODO: behavior "asks player for hit/stay until they stay or bust"
     public Action dealToHuman(HumanPlayer humanPlayer, BotPlayer botPlayer, Deck gameDeck) throws OutOfCardsError {
         Action humanAction = Action.Hit;
         while (humanAction != Action.Stay && humanAction != Action.Busted) {
@@ -92,6 +90,7 @@ public class BlackJackGame implements BlackJackGameI {
 
         //deal to human
         humanPlayer.addCard(gameDeck);
+
         //deal to bot
         botPlayer.addCard(gameDeck);
     }

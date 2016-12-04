@@ -37,4 +37,9 @@ public class HumanPlayer implements PlayerI {
     public Hand getHand() {
         return humanHand;
     }
+
+    @Override
+    public String getVisibleHand(boolean hideBottom) {
+        return humanHand.visibleHand(hideBottom);
+    }
 }

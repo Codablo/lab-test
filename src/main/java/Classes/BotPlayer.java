@@ -28,8 +28,14 @@ public class BotPlayer implements PlayerI {
     public void addCard(Deck deck) throws OutOfCardsError {
         botHand.addCard(deck.dealCard());
     }
+
     @Override
     public Hand getHand() {
         return botHand;
+    }
+
+    @Override
+    public String getVisibleHand(boolean hideBottom) {
+        return botHand.visibleHand(hideBottom);
     }
 }

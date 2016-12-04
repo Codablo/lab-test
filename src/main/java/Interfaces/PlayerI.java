@@ -15,4 +15,6 @@ public interface PlayerI {
 
     public void addCard(Deck deck) throws OutOfCardsError;
 
+    public String getVisibleHand(boolean hideBottom);
+
 }

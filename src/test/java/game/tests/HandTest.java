@@ -8,6 +8,7 @@ import enums.Suite;
 import org.junit.Test;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,6 +25,18 @@ public class HandTest {
         Hand newHand = Dependencies.hand.make();
 
         assertEquals(newHand.size(), 0);
+    }
+
+    @Test
+    public void is_not_changed_when_copy_of_cards_from_hand_is_changed() {
+        Hand newHand = Dependencies.hand.make();
+        Set<Card> copyCards = newHand.getCards();
+        Set<Card> modifyCards = newHand.getCards();
+
+        modifyCards.add(eightOfClubs);
+        modifyCards.add(threeOfHearts);
+
+        assertEquals(copyCards, newHand.getCards());
     }
 
     @Test
@@ -68,7 +81,7 @@ public class HandTest {
     }
 
     @Test
-    public void does_not_obscure_first_card_when_not_hidingbottom() {
+    public void does_not_obscure_first_card_when_not_hiding_bottom() {
         Hand newHand = Dependencies.hand.make();
         String expectedHand = eightOfClubs.toString() + "," + threeOfHearts.toString() + "," + sevenOfDiamonds.toString();
 
