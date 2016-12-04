@@ -112,6 +112,7 @@ public class BlackJackGameTest {
         inOrder.verify(mockedBotPlayer).addCard(any());
         inOrder.verify(mockedHumanPlayer).addCard(any());
         inOrder.verify(mockedBotPlayer).addCard(any());
+        inOrder.verifyNoMoreInteractions();
     }
 
     @Test
