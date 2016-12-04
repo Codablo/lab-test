@@ -18,7 +18,7 @@ public class HumanPlayer implements PlayerI {
             return Action.Busted;
         }
         String actions = "Your Hand: {" + score.getScore(humanHand) + "} " + humanHand.visibleHand(false) +
-                "\nBOT Player Hand: " + otherHand.visibleHand(true) + ",\npress h to Hit or s to Stay:";
+                "\nDealer Hand: " + otherHand.visibleHand(true) + ",\npress h to Hit or s to Stay:";
         String validActions = "[" + Action.Stay.text + Action.Hit.text + "]";
         String userResponse = humanPrompt.prompt(actions, validActions, Action.Stay.text);
         if (userResponse.equals(Action.Stay.text)) {

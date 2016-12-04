@@ -1,20 +1,20 @@
 package game.tests;
 
+import Applications.Server;
 import Classes.*;
-import enums.Action;
 import navis.injection.Resettable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InOrder;
 
-import static org.mockito.Matchers.any;
+import java.io.IOException;
+
 import static org.mockito.Mockito.*;
 
 /**
  * Created by mikehollibaugh on 12/4/16.
  */
-public class BlackJackGameTest {
+public class MainTest {
 
     protected Score mockedScore = null;
     protected BotPlayer mockedBotPlayer = null;
@@ -26,6 +26,7 @@ public class BlackJackGameTest {
     protected Hand mockedBotHand = null;
     protected Operations mockedOperations = null;
     protected BlackJackHelper mockedHelper = null;
+    protected BlackJackGame mockedGame = null;
 
     public Resettable withMockScore() {
         mockedScore = mock(Score.class);
@@ -77,6 +78,11 @@ public class BlackJackGameTest {
         return Dependencies.blackJackHelper.override(() -> mockedHelper);
     }
 
+    public Resettable withMockGame() {
+        mockedGame = mock(BlackJackGame.class);
+        return Dependencies.blackJackGame.override(() -> mockedGame);
+    }
+
     @Before
     public void setup() {
         withMockScore();
@@ -89,6 +95,7 @@ public class BlackJackGameTest {
         withMockBotPlayer();
         withMockOperations();
         withMockHelper();
+        withMockGame();
     }
 
     @After
@@ -103,25 +110,17 @@ public class BlackJackGameTest {
         Dependencies.botPlayer.close();
         Dependencies.operations.close();
         Dependencies.blackJackHelper.close();
+        Dependencies.blackJackGame.close();
     }
 
     @Test
-    public void is_played_in_the_correct_order() throws OutOfCardsError {
-        BlackJackGame blackJackGame = Dependencies.blackJackGame.make();
-        when(mockedHumanPlayer.nextAction(any())).thenReturn(Action.Stay);
-        when(mockedBotPlayer.nextAction(any())).thenReturn(Action.Stay);
-        when(mockedHumanPlayer.getHand()).thenReturn(mockedHumanHand);
-        when(mockedBotPlayer.getHand()).thenReturn(mockedBotHand);
+    public void game_is_played() throws OutOfCardsError, IOException, java.lang.Exception {
+        Server server = new Server();
+        String[] args = {""};
 
-        blackJackGame.play();
+        server.main(args);
 
-        InOrder inOrder = inOrder(mockedHelper);
-        inOrder.verify(mockedHelper).initGame(any(), any(), any());
-        inOrder.verify(mockedHelper).dealToHuman(any(), any(), any());
-        inOrder.verify(mockedHelper).dealToBot(any(), any(), any());
-        inOrder.verify(mockedHelper).getOutcome(any(), any(), any(), any());
-        inOrder.verify(mockedHelper).displayGameResults(any(), any(), any());
-        inOrder.verifyNoMoreInteractions();
+        verify(mockedGame, times((1))).play();
+
     }
-
 }
