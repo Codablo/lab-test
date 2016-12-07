@@ -25,7 +25,6 @@ public class MainTest {
     protected Hand mockedHumanHand = null;
     protected Hand mockedBotHand = null;
     protected Operations mockedOperations = null;
-    protected BlackJackHelper mockedHelper = null;
     protected BlackJackGame mockedGame = null;
 
     public Resettable withMockScore() {
@@ -73,11 +72,6 @@ public class MainTest {
         return Dependencies.operations.override(() -> mockedOperations);
     }
 
-    public Resettable withMockHelper() {
-        mockedHelper = mock(BlackJackHelper.class);
-        return Dependencies.blackJackHelper.override(() -> mockedHelper);
-    }
-
     public Resettable withMockGame() {
         mockedGame = mock(BlackJackGame.class);
         return Dependencies.blackJackGame.override(() -> mockedGame);
@@ -94,7 +88,6 @@ public class MainTest {
         withMockBotHand();
         withMockBotPlayer();
         withMockOperations();
-        withMockHelper();
         withMockGame();
     }
 
@@ -109,7 +102,6 @@ public class MainTest {
         Dependencies.bothand.close();
         Dependencies.botPlayer.close();
         Dependencies.operations.close();
-        Dependencies.blackJackHelper.close();
         Dependencies.blackJackGame.close();
     }
 

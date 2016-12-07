@@ -109,14 +109,6 @@ public class Dependencies {
         }
     });
 
-    public static final InstanceFactory<BlackJackHelper> blackJackHelper = new InstanceFactory<>(new BuildFunction<BlackJackHelper>() {
-
-        @Override
-        public BlackJackHelper build() {
-            return new BlackJackHelper();
-        }
-    });
-
     public static final InstanceFactory<BlackJackGame> blackJackGame = new InstanceFactory<>(new BuildFunction<BlackJackGame>() {
 
         @Override
