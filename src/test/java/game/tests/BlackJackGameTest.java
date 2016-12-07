@@ -28,6 +28,11 @@ public class BlackJackGameTest {
     protected Hand mockedBotHand = null;
     protected Operations mockedOperations = null;
     protected BlackJackGame mockedGame = null;
+    protected BlackJackGame realGame = null;
+
+    public void withRealGame() {
+        realGame = new BlackJackGame();
+    }
 
     public Resettable withMockScore() {
         mockedScore = mock(Score.class);
@@ -91,6 +96,7 @@ public class BlackJackGameTest {
         withMockBotPlayer();
         withMockOperations();
         withMockGame();
+        withRealGame();
     }
 
     @After
@@ -105,14 +111,13 @@ public class BlackJackGameTest {
         Dependencies.botPlayer.close();
         Dependencies.operations.close();
         Dependencies.blackJackGame.close();
+        realGame = null;
     }
-
 
     @Test
     public void deck_is_shuffled_and_each_player_is_dealt_to_in_order() throws OutOfCardsError {
-        when(mockedGame.initGame(mockedHumanPlayer, mockedBotPlayer, mockedDeck)).thenCallRealMethod();
 
-        mockedGame.initGame(mockedHumanPlayer, mockedBotPlayer, mockedDeck);
+        realGame.initGame(mockedHumanPlayer, mockedBotPlayer, mockedDeck);
 
         InOrder inOrder = inOrder(mockedDeck, mockedHumanPlayer, mockedBotPlayer, mockedHumanPlayer, mockedBotPlayer);
         inOrder.verify(mockedDeck).shuffle(any());
@@ -125,9 +130,8 @@ public class BlackJackGameTest {
 
     @Test
     public void each_player_starts_with_two_cards() throws OutOfCardsError {
-        when(mockedGame.initGame(mockedHumanPlayer, mockedBotPlayer, mockedDeck)).thenCallRealMethod();
 
-        mockedGame.initGame(mockedHumanPlayer, mockedBotPlayer, mockedDeck);
+        realGame.initGame(mockedHumanPlayer, mockedBotPlayer, mockedDeck);
 
         verify(mockedBotPlayer, times(2)).addCard(any());
         verify(mockedHumanPlayer, times((2))).addCard(any());
@@ -135,11 +139,10 @@ public class BlackJackGameTest {
 
     @Test
     public void human_is_dealt_to_until_stay() throws OutOfCardsError {
-        when(mockedGame.dealToHuman(mockedHumanPlayer, mockedBotPlayer, mockedDeck)).thenCallRealMethod();
         when(mockedHumanPlayer.nextAction(any())).thenReturn(Action.Hit).thenReturn(Action.Hit).thenReturn(Action.Stay);
 
         for (int i = 0; i < 3; i++) {
-            mockedGame.dealToHuman(mockedHumanPlayer, mockedBotPlayer, mockedDeck);
+            realGame.processHumanTurn(mockedHumanPlayer, mockedBotPlayer, mockedDeck);
         }
 
         verify(mockedHumanPlayer, times((2))).addCard(any());
@@ -147,11 +150,10 @@ public class BlackJackGameTest {
 
     @Test
     public void human_is_dealt_to_until_bust() throws OutOfCardsError {
-        when(mockedGame.dealToHuman(mockedHumanPlayer, mockedBotPlayer, mockedDeck)).thenCallRealMethod();
         when(mockedHumanPlayer.nextAction(any())).thenReturn(Action.Hit).thenReturn(Action.Hit).thenReturn(Action.Hit).thenReturn(Action.Busted);
 
         for (int i = 0; i < 4; i++) {
-            mockedGame.dealToHuman(mockedHumanPlayer, mockedBotPlayer, mockedDeck);
+            realGame.processHumanTurn(mockedHumanPlayer, mockedBotPlayer, mockedDeck);
         }
 
         verify(mockedHumanPlayer, times((3))).addCard(any());
@@ -159,55 +161,46 @@ public class BlackJackGameTest {
 
     @Test
     public void outcome_is_bot_when_human_is_busted() {
-        when(mockedGame.getOutcome(mockedHumanPlayer, mockedBotPlayer, Action.Busted, Action.Stay)).thenCallRealMethod();
-        Outcome outcome;
 
-        outcome = mockedGame.getOutcome(mockedHumanPlayer, mockedBotPlayer, Action.Busted, Action.Stay);
+        Outcome outcome = realGame.getOutcome(mockedHumanPlayer, mockedBotPlayer, Action.Busted, Action.Stay);
 
         assertEquals(outcome, Outcome.Bot);
     }
 
     @Test
     public void outcome_is_human_when_bot_is_busted_and_human_is_not() {
-        when(mockedGame.getOutcome(mockedHumanPlayer, mockedBotPlayer, Action.Stay, Action.Busted)).thenCallRealMethod();
-        Outcome outcome;
-
-        outcome = mockedGame.getOutcome(mockedHumanPlayer, mockedBotPlayer, Action.Stay, Action.Busted);
+        Outcome outcome = realGame.getOutcome(mockedHumanPlayer, mockedBotPlayer, Action.Stay, Action.Busted);
 
         assertEquals(outcome, Outcome.Human);
     }
 
     @Test
     public void outcome_is_displayed() {
-        when(mockedGame.displayGameResults(mockedHumanPlayer, mockedBotPlayer, Outcome.Human)).thenCallRealMethod();
         String humanWinner = "The winner is Human!";
 
-        mockedGame.displayGameResults(mockedHumanPlayer, mockedBotPlayer, Outcome.Human);
+        realGame.displayGameResults(mockedHumanPlayer, mockedBotPlayer, Outcome.Human);
 
         verify(mockedConsole).writeToConsole(humanWinner);
     }
 
     @Test
     public void dealer_cards_are_displayed_when_gane_is_over_with_none_hidden() {
-        when(mockedGame.displayGameResults(mockedHumanPlayer, mockedBotPlayer, Outcome.Human)).thenCallRealMethod();
 
-        mockedGame.displayGameResults(mockedHumanPlayer, mockedBotPlayer, Outcome.Human);
+        realGame.displayGameResults(mockedHumanPlayer, mockedBotPlayer, Outcome.Human);
 
         verify(mockedBotPlayer).getVisibleHand(false);
     }
 
     @Test
     public void human_cards_are_displayed_when_game_is_over() {
-        when(mockedGame.displayGameResults(mockedHumanPlayer, mockedBotPlayer, Outcome.Human)).thenCallRealMethod();
 
-        mockedGame.displayGameResults(mockedHumanPlayer, mockedBotPlayer, Outcome.Human);
+        realGame.displayGameResults(mockedHumanPlayer, mockedBotPlayer, Outcome.Human);
 
         verify(mockedHumanPlayer).getVisibleHand(false);
     }
 
     @Test
     public void each_players_score_is_displayed_when_the_game_is_over() {
-        when(mockedGame.displayGameResults(mockedHumanPlayer, mockedBotPlayer, Outcome.None)).thenCallRealMethod();
         String gameWinner = "The winner is None!";
         String humanScore = "\nYour Hand: (0) ";
         String dealerScore = "\nDealer Hand: (0) ";
@@ -215,7 +208,7 @@ public class BlackJackGameTest {
         when(mockedHumanPlayer.getVisibleHand(false)).thenReturn("");
         when(mockedBotPlayer.getVisibleHand(anyBoolean())).thenReturn("");
 
-        mockedGame.displayGameResults(mockedHumanPlayer, mockedBotPlayer, Outcome.None);
+        realGame.displayGameResults(mockedHumanPlayer, mockedBotPlayer, Outcome.None);
 
         verify(mockedConsole).writeToConsole(gameWinner);
         verify(mockedConsole).writeToConsole(humanScore);
@@ -225,10 +218,9 @@ public class BlackJackGameTest {
     @Test
     public void bot_is_dealt_to_until_stay() throws OutOfCardsError {
         when(mockedBotPlayer.nextAction(any())).thenReturn(Action.Hit).thenReturn(Action.Hit).thenReturn(Action.Stay);
-        when(mockedGame.dealToBot(mockedHumanPlayer, mockedBotPlayer, mockedDeck)).thenCallRealMethod();
 
         for (int i = 0; i < 3; i++) {
-            mockedGame.dealToBot(mockedHumanPlayer, mockedBotPlayer, mockedDeck);
+            realGame.processDealerTurn(mockedHumanPlayer, mockedBotPlayer, mockedDeck);
         }
 
         verify(mockedBotPlayer, times((2))).addCard(any());
@@ -237,10 +229,9 @@ public class BlackJackGameTest {
     @Test
     public void bot_is_dealt_to_until_bust() throws OutOfCardsError {
         when(mockedBotPlayer.nextAction(any())).thenReturn(Action.Hit).thenReturn(Action.Hit).thenReturn(Action.Hit).thenReturn(Action.Busted);
-        when(mockedGame.dealToBot(mockedHumanPlayer, mockedBotPlayer, mockedDeck)).thenCallRealMethod();
 
         for (int i = 0; i < 4; i++) {
-            mockedGame.dealToBot(mockedHumanPlayer, mockedBotPlayer, mockedDeck);
+            realGame.processDealerTurn(mockedHumanPlayer, mockedBotPlayer, mockedDeck);
         }
 
         verify(mockedBotPlayer, times((3))).addCard(any());
@@ -250,16 +241,13 @@ public class BlackJackGameTest {
     public void is_played_in_the_correct_order() throws OutOfCardsError {
         when(mockedHumanPlayer.nextAction(any())).thenReturn(Action.Stay);
         when(mockedBotPlayer.nextAction(any())).thenReturn(Action.Stay);
-        when(mockedHumanPlayer.getHand()).thenReturn(mockedHumanHand);
-        when(mockedBotPlayer.getHand()).thenReturn(mockedBotHand);
-        when(mockedGame.play()).thenCallRealMethod();
 
-        mockedGame.play();
+        realGame.play();
 
         InOrder inOrder = inOrder(mockedGame);
         inOrder.verify(mockedGame).initGame(any(), any(), any());
-        inOrder.verify(mockedGame).dealToHuman(any(), any(), any());
-        inOrder.verify(mockedGame).dealToBot(any(), any(), any());
+        inOrder.verify(mockedGame).processHumanTurn(any(), any(), any());
+        inOrder.verify(mockedGame).processDealerTurn(any(), any(), any());
         inOrder.verify(mockedGame).getOutcome(any(), any(), any(), any());
         inOrder.verify(mockedGame).displayGameResults(any(), any(), any());
         inOrder.verifyNoMoreInteractions();

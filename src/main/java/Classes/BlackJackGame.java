@@ -10,39 +10,62 @@ import enums.Outcome;
 public class BlackJackGame implements BlackJackGameI {
 
     @Override
-    public int play() throws OutOfCardsError {
+    public void play() throws OutOfCardsError {
         Deck gameDeck = Dependencies.deck.make();
         HumanPlayer humanPlayer = Dependencies.humanPlayer.make();
         BotPlayer botPlayer = Dependencies.botPlayer.make();
+        BlackJackGame game = Dependencies.blackJackGame.make();
 
-        initGame(humanPlayer, botPlayer, gameDeck);
-        Action humanAction = dealToHuman(humanPlayer, botPlayer, gameDeck);
+        game.initGame(humanPlayer, botPlayer, gameDeck);
+        Action humanAction = game.processHumanTurn(humanPlayer, botPlayer, gameDeck);
         Action botAction = Action.Hit;
         if (humanAction != Action.Busted) {
-            botAction = dealToBot(humanPlayer, botPlayer, gameDeck);
+            botAction = game.processDealerTurn(humanPlayer, botPlayer, gameDeck);
         }
-        Outcome outcome = getOutcome(humanPlayer, botPlayer, humanAction, botAction);
-        displayGameResults(humanPlayer, botPlayer, outcome);
-        return(0);
+        Outcome outcome = game.getOutcome(humanPlayer, botPlayer, humanAction, botAction);
+        game.displayGameResults(humanPlayer, botPlayer, outcome);
     }
-    @Override
-    public int displayGameResults(HumanPlayer humanPlayer, BotPlayer botPlayer, Outcome outcome) {
-        Score score = Dependencies.score.make();
-        ConsoleIO consoleIO = Dependencies.console.make();
-        if (outcome == null) {
-            outcome = Outcome.None;
-        }
 
-        if (outcome == Outcome.Push) {
-            consoleIO.writeToConsole(String.format("The game is a Push!"));
-        } else {
-            consoleIO.writeToConsole(String.format("The winner is " + outcome.text + "!"));
+    @Override
+    public void initGame(HumanPlayer humanPlayer, BotPlayer botPlayer, Deck gameDeck) throws OutOfCardsError {
+        gameDeck.shuffle(Dependencies.random.make(""));
+
+        //deal to human
+        humanPlayer.addCard(gameDeck);
+
+        //deal to bot
+        botPlayer.addCard(gameDeck);
+
+        //deal to human
+        humanPlayer.addCard(gameDeck);
+
+        //deal to bot
+        botPlayer.addCard(gameDeck);
+    }
+
+    @Override
+    public Action processDealerTurn(HumanPlayer humanPlayer, BotPlayer botPlayer, Deck gameDeck) throws OutOfCardsError {
+        //deal to bot until stay or bust
+        Action botAction = Action.Hit;
+        while (botAction != Action.Busted && botAction != Action.Stay) {
+            botAction = botPlayer.nextAction(humanPlayer.getHand());
+            if (botAction == Action.Hit) {
+                botPlayer.addCard(gameDeck);
+            }
         }
-        consoleIO.writeToConsole(String.format("\nYour Hand: (" + score.getScore(humanPlayer.getHand()) + ") " +
-                humanPlayer.getVisibleHand(false)));
-        consoleIO.writeToConsole(String.format("\nDealer Hand: (" + score.getScore(botPlayer.getHand()) + ") " +
-                botPlayer.getVisibleHand(false)));
-        return(0);
+        return botAction;
+    }
+
+    @Override
+    public Action processHumanTurn(HumanPlayer humanPlayer, BotPlayer botPlayer, Deck gameDeck) throws OutOfCardsError {
+        Action humanAction = Action.Hit;
+        while (humanAction != Action.Stay && humanAction != Action.Busted) {
+            humanAction = humanPlayer.nextAction(botPlayer.getHand());
+            if (humanAction == Action.Hit) {
+                humanPlayer.addCard(gameDeck);
+            }
+        }
+        return humanAction;
     }
 
     @Override
@@ -60,46 +83,21 @@ public class BlackJackGame implements BlackJackGameI {
     }
 
     @Override
-    public Action dealToHuman(HumanPlayer humanPlayer, BotPlayer botPlayer, Deck gameDeck) throws OutOfCardsError {
-        Action humanAction = Action.Hit;
-        while (humanAction != Action.Stay && humanAction != Action.Busted) {
-            humanAction = humanPlayer.nextAction(botPlayer.getHand());
-            if (humanAction == Action.Hit) {
-                humanPlayer.addCard(gameDeck);
-            }
+    public void displayGameResults(HumanPlayer humanPlayer, BotPlayer botPlayer, Outcome outcome) {
+        Score score = Dependencies.score.make();
+        ConsoleIO consoleIO = Dependencies.console.make();
+        if (outcome == null) {
+            outcome = Outcome.None;
         }
-        return humanAction;
-    }
 
-    @Override
-    public int initGame(HumanPlayer humanPlayer, BotPlayer botPlayer, Deck gameDeck) throws OutOfCardsError {
-        gameDeck.shuffle(Dependencies.random.make(""));
-
-        //deal to human
-        humanPlayer.addCard(gameDeck);
-
-        //deal to bot
-        botPlayer.addCard(gameDeck);
-
-        //deal to human
-        humanPlayer.addCard(gameDeck);
-
-        //deal to bot
-        botPlayer.addCard(gameDeck);
-        return (0);
-    }
-
-    @Override
-    public Action dealToBot(HumanPlayer humanPlayer, BotPlayer botPlayer, Deck gameDeck) throws OutOfCardsError {
-        //deal to bot until stay or bust
-        Action botAction = Action.Hit;
-        while (botAction != Action.Busted && botAction != Action.Stay) {
-            botAction = botPlayer.nextAction(humanPlayer.getHand());
-            if (botAction == Action.Hit) {
-                botPlayer.addCard(gameDeck);
-            }
+        if (outcome == Outcome.Push) {
+            consoleIO.writeToConsole(String.format("The game is a Push!"));
+        } else {
+            consoleIO.writeToConsole(String.format("The winner is " + outcome.text + "!"));
         }
-        return botAction;
+        consoleIO.writeToConsole(String.format("\nYour Hand: (" + score.getScore(humanPlayer.getHand()) + ") " +
+                humanPlayer.getVisibleHand(false)));
+        consoleIO.writeToConsole(String.format("\nDealer Hand: (" + score.getScore(botPlayer.getHand()) + ") " +
+                botPlayer.getVisibleHand(false)));
     }
-
 }
